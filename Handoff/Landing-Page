@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadyProspect - AI Lead Generation & Automation</title>
+    <style>
+        /* ============================================
+           GLOBAL CSS VARIABLES & RESET
+           ============================================ */
+        :root {
+            /* Primary Colors - Bold, high contrast */
+            --primary: #0052CC;
+            --primary-dark: #003D99;
+            --primary-light: #E8F0FF;
+            
+            /* Accent Colors */
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            
+            /* Grayscale - Colorblind safe */
+            --dark-bg: #0F172A;
+            --dark-text: #1E293B;
+            --light-bg: #F8FAFC;
+            --light-text: #64748B;
+            --border: #E2E8F0;
+            
+            /* Typography */
+            --font-display: 'Georgia', serif;
+            --font-body: 'Segoe UI', -apple-system, sans-serif;
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2.5rem;
+            --spacing-xl: 4rem;
+            --spacing-2xl: 6rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .section-spacing {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-muted {
+            color: var(--light-text);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 82, 204, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            line-height: 1.2;
+            margin-bottom: var(--spacing-md);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: var(--spacing-md);
+            font-size: 1.1rem;
+            color: var(--light-text);
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-right {
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+
+        /* Stagger animation delays */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* ============================================
+           SECTION: HEADER & NAVIGATION
+           ============================================ */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 0.5rem;
+        }
+
+        .nav-cta:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============================================
+           SECTION: HERO
+           ============================================ */
+        /* START HERO SECTION */
+        section.hero {
+            margin-top: 80px;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--primary-light) 0%, #FFFFFF 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-text h1 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .hero-cta-group .btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 1.1rem;
+        }
+
+        .hero-visual {
+            background: white;
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            box-shadow: 0 20px 40px rgba(0, 82, 204, 0.1);
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            background: linear-gradient(135deg, #E8F0FF 0%, #F0F9FF 100%);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+        /* END HERO SECTION */
+
+        /* ============================================
+           SECTION: PROBLEM STATEMENT
+           ============================================ */
+        /* START PROBLEM SECTION */
+        section.problem {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--light-bg);
+            position: relative;
+        }
+
+        .problem-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: center;
+        }
+
+        .problem-visual {
+            background: white;
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .problem-text h2 {
+            color: var(--danger);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .problem-stat {
+            background: white;
+            border-left: 4px solid var(--danger);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .problem-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--danger);
+        }
+
+        .problem-stat-label {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .problem-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* END PROBLEM SECTION */
+
+        /* ============================================
+           SECTION: SOLUTION (TWO PATHS)
+           ============================================ */
+        /* START SOLUTION SECTION */
+        section.solution {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: white;
+        }
+
+        .solution-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .solution-header h2 {
+            color: var(--primary);
+        }
+
+        .solution-paths {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        .solution-path {
+            background: var(--light-bg);
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .solution-path:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(0, 82, 204, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .solution-path h3 {
+            color: var(--primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .solution-path p {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .solution-path .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .solution-paths {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* END SOLUTION SECTION */
+
+        /* ============================================
+           SECTION: HOW IT WORKS
+           ============================================ */
+        /* START HOW-IT-WORKS SECTION */
+        section.how-it-works {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--light-bg);
+        }
+
+        .how-it-works-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .how-it-works-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .how-it-works-header h2 {
+            color: var(--primary);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .step {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            right: -var(--spacing-lg);
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--spacing-lg);
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .step h3 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .step p {
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .step::after {
+                display: none;
+            }
+        }
+        /* END HOW-IT-WORKS SECTION */
+
+        /* ============================================
+           SECTION: CASE STUDIES / SOCIAL PROOF
+           ============================================ */
+        /* START CASE-STUDIES SECTION */
+        section.case-studies {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: white;
+        }
+
+        .case-studies-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .case-studies-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .case-studies-header h2 {
+            color: var(--primary);
+        }
+
+        .case-studies-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .case-study {
+            background: var(--light-bg);
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .case-study:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .case-study-company {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .case-study-industry {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-md);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .case-study-metrics {
+            background: white;
+            border-left: 4px solid var(--success);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-radius: 0.25rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.95rem;
+        }
+
+        .metric-before {
+            color: var(--light-text);
+        }
+
+        .metric-after {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .case-study-quote {
+            font-style: italic;
+            color: var(--light-text);
+            border-left: 3px solid var(--primary);
+            padding-left: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+
+        @media (max-width: 768px) {
+            .case-studies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* END CASE-STUDIES SECTION */
+
+        /* ============================================
+           SECTION: ROI CALCULATOR
+           ============================================ */
+        /* START ROI-CALCULATOR SECTION */
+        section.roi-calculator {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--primary-light) 0%, #F0F9FF 100%);
+        }
+
+        .roi-calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .roi-calculator-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .roi-calculator-header h2 {
+            color: var(--primary-dark);
+        }
+
+        .roi-form {
+            background: white;
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            box-shadow: 0 8px 24px rgba(0, 82, 204, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--dark-text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .roi-result {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: var(--spacing-xl);
+            border-radius: 0.5rem;
+            margin-top: var(--spacing-lg);
+            display: none;
+        }
+
+        .roi-result.show {
+            display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .roi-result-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .roi-result-label {
+            color: var(--light-text);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .roi-result-cta {
+            margin-top: var(--spacing-lg);
+        }
+
+        .roi-result-cta .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .roi-form {
+                padding: var(--spacing-lg);
+            }
+        }
+        /* END ROI-CALCULATOR SECTION */
+
+        /* ============================================
+           SECTION: TESTIMONIALS
+           ============================================ */
+        /* START TESTIMONIALS SECTION */
+        section.testimonials {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--light-bg);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .testimonials-header h2 {
+            color: var(--primary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .testimonial {
+            background: white;
+            border-radius: 1rem;
+            padding: var(--spacing-lg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .testimonial-stars {
+            color: var(--warning);;
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .testimonial-text {
+            color: var(--light-text);
+            margin-bottom: var(--spacing-md);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* END TESTIMONIALS SECTION */
+
+        /* ============================================
+           SECTION: PRICING
+           ============================================ */
+        /* START PRICING SECTION */
+        section.pricing {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: white;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .pricing-header h2 {
+            color: var(--primary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .pricing-card {
+            border: 2px solid var(--border);
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(0, 82, 204, 0.15);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover:not(.featured) {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.08);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .pricing-price-unit {
+            font-size: 1rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin: var(--spacing-lg) 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: var(--spacing-lg) 0;
+        }
+
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+            font-size: 0.95rem;
+        }
+
+        .pricing-feature::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            margin-right: var(--spacing-md);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            margin-top: var(--spacing-lg);
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+        /* END PRICING SECTION */
+
+        /* ============================================
+           SECTION: FAQ
+           ============================================ */
+        /* START FAQ SECTION */
+        section.faq {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--light-bg);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .faq-header h2 {
+            color: var(--primary);
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 0.5rem;
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: var(--spacing-lg);
+            font-weight: 600;
+            color: var(--dark-text);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--primary-light);
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            color: var(--light-text);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding: var(--spacing-lg);
+        }
+
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 0 var(--spacing-md);
+            }
+        }
+        /* END FAQ SECTION */
+
+        /* ============================================
+           SECTION: DEMO CTA
+           ============================================ */
+        /* START DEMO-CTA SECTION */
+        section.demo-cta {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .demo-cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .demo-cta h2 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .demo-cta p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .demo-cta .btn-secondary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .demo-cta .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* END DEMO-CTA SECTION */
+
+        /* ============================================
+           SECTION: FOOTER
+           ============================================ */
+        /* START FOOTER SECTION */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-column h3 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .footer-column a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: var(--spacing-sm);
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--spacing-lg);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        /* END FOOTER SECTION */
+
+        /* ============================================
+           RESPONSIVE UTILITIES
+           ============================================ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--spacing-md);
+            }
+
+            .section-spacing {
+                padding: var(--spacing-xl) 0;
+            }
+
+            nav {
+                gap: var(--spacing-md);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero-cta-group {
+                flex-direction: column;
+            }
+
+            .hero-cta-group .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================================================
+     HEADER & NAVIGATION
+     ================================================ -->
+<!-- START HEADER SECTION -->
+<header id="header">
+    <div class="header-content">
+        <a href="#" class="logo">ReadyProspect</a>
+        <nav>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#case-studies">Results</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="#demo-booking" class="nav-cta">Book Demo</a>
+        </nav>
+    </div>
+</header>
+<!-- END HEADER SECTION -->
+
+<!-- ================================================
+     HERO SECTION
+     ================================================ -->
+<!-- START HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text animate-fade-in-up">
+            <h1 id="hero-headline">Stop Losing $50k/Month to Missed Calls</h1>
+            <p id="hero-subheading">Businesses using ProspectMax recover an average of $47,000/month in lost revenue within 90 days.</p>
+            <div class="hero-cta-group">
+                <button class="btn btn-primary" onclick="document.getElementById('roi-calculator').scrollIntoView({behavior: 'smooth'})">
+                    See Your Recovery Amount
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">
+                    Watch 2-Min Demo
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual animate-slide-in-right">
+            📞 → 🤖 → 💰
+            <p style="font-size: 1rem; margin-top: var(--spacing-lg);">Your calls answered 24/7</p>
+        </div>
+    </div>
+</section>
+<!-- END HERO SECTION -->
+
+<!-- ================================================
+     PROBLEM STATEMENT
+     ================================================ -->
+<!-- START PROBLEM SECTION -->
+<section class="problem">
+    <div class="problem-content">
+        <div class="problem-visual">
+            <div style="font-size: 5rem; text-align: center;">❌</div>
+            <p style="text-align: center; color: var(--light-text); margin-top: var(--spacing-lg);">80% of callers don't leave a voicemail</p>
+        </div>
+        <div class="problem-text">
+            <h2>The Real Cost of Missed Opportunities</h2>
+            <p>Most businesses lose 30-40% of inbound leads because:</p>
+            <div class="problem-stat">
+                <div class="problem-stat-number">🔴 80%</div>
+                <div class="problem-stat-label">Callers don't leave voicemails—they call your competitor</div>
+            </div>
+            <div class="problem-stat">
+                <div class="problem-stat-number">🔴 2 Hours</div>
+                <div class="problem-stat-label">Average response time to web form submissions</div>
+            </div>
+            <div class="problem-stat">
+                <div class="problem-stat-number">🔴 60%</div>
+                <div class="problem-stat-label">Of leads never get followed up with again</div>
+            </div>
+            <p style="margin-top: var(--spacing-lg);">
+                <strong>The worst part?</strong> You don't even know how much revenue you're losing. Without tracking, it's invisible.
+            </p>
+        </div>
+    </div>
+</section>
+<!-- END PROBLEM SECTION -->
+
+<!-- ================================================
+     SOLUTION (TWO PATHS)
+     ================================================ -->
+<!-- START SOLUTION SECTION -->
+<section class="solution">
+    <div class="solution-container">
+        <div class="solution-header">
+            <h2>Choose Your Path</h2>
+            <p>ReadyProspect solves this for two different business types</p>
+        </div>
+        <div class="solution-paths">
+            <div class="solution-path animate-fade-in-up delay-1">
+                <h3>🏢 For Business Owners</h3>
+                <p>You want better lead capture and conversion without hiring more staff.</p>
+                <p><strong>ProspectID + ProspectMax</strong> works silently in the background, answering calls 24/7, following up automatically, and letting you focus on what matters.</p>
+                <button class="btn btn-primary" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">
+                    See How It Works
+                </button>
+            </div>
+            <div class="solution-path animate-fade-in-up delay-2">
+                <h3>🤝 For Agency Partners</h3>
+                <p>You want a white-label solution you can resell to your clients.</p>
+                <p>We handle the tech, the support, and the training. You keep the margin and look like a hero to your clients.</p>
+                <button class="btn btn-primary" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">
+                    See Partner Program
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END SOLUTION SECTION -->
+
+<!-- ================================================
+     HOW IT WORKS
+     ================================================ -->
+<!-- START HOW-IT-WORKS SECTION -->
+<section class="how-it-works" id="how-it-works">
+    <div class="how-it-works-container">
+        <div class="how-it-works-header">
+            <h2>How ReadyProspect Works</h2>
+            <p>Three simple steps to capture and convert more leads</p>
+        </div>
+        <div class="steps">
+            <div class="step animate-fade-in-up delay-1">
+                <div class="step-number">1</div>
+                <h3>Identify</h3>
+                <p><strong>ProspectID</strong> spots when people in your market are actively shopping—before they even contact you.</p>
+            </div>
+            <div class="step animate-fade-in-up delay-2">
+                <div class="step-number">2</div>
+                <h3>Respond</h3>
+                <p><strong>ProspectMax</strong> answers calls 24/7, responds to web forms instantly, and captures every lead.</p>
+            </div>
+            <div class="step animate-fade-in-up delay-3">
+                <div class="step-number">3</div>
+                <h3>Convert</h3>
+                <p>Automatic follow-up keeps your business top-of-mind until they're ready to buy.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END HOW-IT-WORKS SECTION -->
+
+<!-- ================================================
+     CASE STUDIES / SOCIAL PROOF
+     ================================================ -->
+<!-- START CASE-STUDIES SECTION -->
+<section class="case-studies" id="case-studies">
+    <div class="case-studies-container">
+        <div class="case-studies-header">
+            <h2>Real Results. Real Businesses.</h2>
+            <p>These are actual customers seeing real revenue impact</p>
+        </div>
+        <div class="case-studies-grid">
+            <div class="case-study animate-fade-in-up delay-1">
+                <div class="case-study-company">Acme Plumbing</div>
+                <div class="case-study-industry">Plumbing</div>
+                <div class="case-study-metrics">
+                    <div class="metric-row">
+                        <span class="metric-before">Leads/month:</span>
+                        <span class="metric-after">20 → 60</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Revenue impact:</span>
+                        <span class="metric-after">+$45,000/mo</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Timeline:</span>
+                        <span class="metric-after">90 days</span>
+                    </div>
+                </div>
+                <div class="case-study-quote">"Our biggest problem was missed calls. ProspectMax gave us back 40% of the customers we were losing."</div>
+            </div>
+            <div class="case-study animate-fade-in-up delay-2">
+                <div class="case-study-company">Smith Dental</div>
+                <div class="case-study-industry">Dental</div>
+                <div class="case-study-metrics">
+                    <div class="metric-row">
+                        <span class="metric-before">Calls answered:</span>
+                        <span class="metric-after">60% → 95%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Revenue impact:</span>
+                        <span class="metric-after">+$36,000/mo</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Timeline:</span>
+                        <span class="metric-after">60 days</span>
+                    </div>
+                </div>
+                <div class="case-study-quote">"We don't have to hire an answering service anymore. ProspectMax costs 1/4 the price and we get better results."</div>
+            </div>
+            <div class="case-study animate-fade-in-up delay-3">
+                <div class="case-study-company">Jones HVAC</div>
+                <div class="case-study-industry">HVAC</div>
+                <div class="case-study-metrics">
+                    <div class="metric-row">
+                        <span class="metric-before">Response time:</span>
+                        <span class="metric-after">2hrs → 2min</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Revenue impact:</span>
+                        <span class="metric-after">+$52,500/mo</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-before">Timeline:</span>
+                        <span class="metric-after">90 days</span>
+                    </div>
+                </div>
+                <div class="case-study-quote">"Being the first to respond completely changed our closing rate. We're now #1 in response speed in our market."</div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END CASE-STUDIES SECTION -->
+
+<!-- ================================================
+     ROI CALCULATOR
+     ================================================ -->
+<!-- START ROI-CALCULATOR SECTION -->
+<section class="roi-calculator" id="roi-calculator">
+    <div class="roi-calculator-container">
+        <div class="roi-calculator-header">
+            <h2>What's Your Recovery Amount?</h2>
+            <p>Answer 3 quick questions to see exactly how much revenue you're leaving on the table</p>
+        </div>
+        <form class="roi-form" onsubmit="calculateROI(event)">
+            <div class="form-group">
+                <label for="industry">What's your industry?</label>
+                <select id="industry" required>
+                    <option value="">Select your industry...</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="dental">Dental</option>
+                    <option value="hvac">HVAC</option>
+                    <option value="home-services">Home Services</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="legal">Legal</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="leads-per-month">How many leads do you get per month?</label>
+                <input type="number" id="leads-per-month" placeholder="e.g., 20" required min="1" max="1000">
+            </div>
+
+            <div class="form-group">
+                <label for="close-rate">What's your close rate? (%)</label>
+                <input type="number" id="close-rate" placeholder="e.g., 30" required min="1" max="100" step="1">
+            </div>
+
+            <div class="form-group">
+                <label for="deal-value">What's your average deal value?</label>
+                <input type="number" id="deal-value" placeholder="e.g., 5000" required min="100" max="1000000" step="100">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Calculate My Recovery Amount</button>
+
+            <div class="roi-result" id="roi-result">
+                <p class="roi-result-label">You're leaving this much revenue on the table each month:</p>
+                <div class="roi-result-number" id="roi-amount">$0</div>
+                <p class="roi-result-label">ProspectMax typically recovers 70% of that.</p>
+                <p style="color: var(--dark-text); font-weight: 600;" id="roi-recovery">That's $0/month in recovered revenue.</p>
+                <div class="roi-result-cta">
+                    <button class="btn btn-primary" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})" style="width: 100%;">
+                        See Your Personalized Plan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- END ROI-CALCULATOR SECTION -->
+
+<!-- ================================================
+     TESTIMONIALS
+     ================================================ -->
+<!-- START TESTIMONIALS SECTION -->
+<section class="testimonials">
+    <div class="testimonials-container">
+        <div class="testimonials-header">
+            <h2>What Customers Say</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">"We grew our revenue by 24%. Our team is sold out for the season!"</div>
+                <div class="testimonial-author">— Happy Lawn Care Client</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">"We love the big increase in actionable prospects! Fresh, exclusive leads."</div>
+                <div class="testimonial-author">— Local Services Business Owner</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">"Better return on marketing investment. They actually helped us reduce budget and focus on key channels."</div>
+                <div class="testimonial-author">— Home Services Agency</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <div class="testimonial-text">"Love the cold list reactivation. AI agents went through old leads quickly and generated new meetings."</div>
+                <div class="testimonial-author">— Sales Director</div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END TESTIMONIALS SECTION -->
+
+<!-- ================================================
+     PRICING
+     ================================================ -->
+<!-- START PRICING SECTION -->
+<section class="pricing" id="pricing">
+    <div class="pricing-container">
+        <div class="pricing-header">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>No surprises. No long contracts. Cancel anytime.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-price">$599</div>
+                <div class="pricing-price-unit">per month</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">AI call answering 24/7</div>
+                    <div class="pricing-feature">Web form responses</div>
+                    <div class="pricing-feature">Basic reporting</div>
+                    <div class="pricing-feature">5 team members</div>
+                </div>
+                <button class="btn btn-secondary pricing-cta" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">Get Started</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-name">Professional</div>
+                <div class="pricing-price">$1,299</div>
+                <div class="pricing-price-unit">per month</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">Everything in Starter</div>
+                    <div class="pricing-feature">ProspectID (lead identification)</div>
+                    <div class="pricing-feature">Advanced reporting & analytics</div>
+                    <div class="pricing-feature">Unlimited team members</div>
+                    <div class="pricing-feature">Priority support</div>
+                </div>
+                <button class="btn btn-primary pricing-cta" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">Start Free Trial</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <div class="pricing-price-unit">contact sales</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">Everything in Professional</div>
+                    <div class="pricing-feature">Custom integrations</div>
+                    <div class="pricing-feature">Dedicated account manager</div>
+                    <div class="pricing-feature">SLA guarantees</div>
+                    <div class="pricing-feature">White-label options</div>
+                </div>
+                <button class="btn btn-secondary pricing-cta" onclick="document.getElementById('demo-booking').scrollIntoView({behavior: 'smooth'})">Schedule Call</button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END PRICING SECTION -->
+
+<!-- ================================================
+     FAQ
+     ================================================ -->
+<!-- START FAQ SECTION -->
+<section class="faq" id="faq">
+    <div class="faq-container">
+        <div class="faq-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Does ProspectMax replace my team?</span>
+                <span class="faq-toggle">▼</span>
+            </div>
+            <div class="faq-answer">
+                No. ProspectMax supports your team. It handles missed calls, routine questions, and follow-up so your team can focus on real conversations with qualified leads.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>How long until we see results?</span>
+                <span class="faq-toggle">▼</span>
+            </div>
+            <div class="faq-answer">
+                Response time improves within days. Lead quality improvements show in 30 days. Revenue impact is typically visible in 60-90 days, depending on your sales cycle.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Is my data safe and private?</span>
+                <span class="faq-toggle">▼</span>
+            </div>
+            <div class="faq-answer">
+                Yes. We're SOC 2 compliant, GDPR/CCPA ready, and use enterprise-grade encryption. All data is stored securely and never shared without your consent.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>What if I'm already using a CRM?</span>
+                <span class="faq-toggle">▼</span>
+            </div>
+            <div class="faq-answer">
+                ProspectMax integrates with most major CRMs (HubSpot, Salesforce, Pipedrive, etc.). We handle lead capture and follow-up; your CRM handles the rest.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Can I cancel anytime?</span>
+                <span class="faq-toggle">▼</span>
+            </div>
+            <div class="faq-answer">
+                Yes. Month-to-month contracts, no long-term commitments. We'd love to keep you, but we want you to stay because you're seeing real results.
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END FAQ SECTION -->
+
+<!-- ================================================
+     DEMO CTA
+     ================================================ -->
+<!-- START DEMO-CTA SECTION -->
+<section class="demo-cta" id="demo-booking">
+    <div class="demo-cta-container">
+        <h2>Ready to Recover Your Lost Revenue?</h2>
+        <p>Book a personalized demo and see exactly how much ReadyProspect can recover for your business.</p>
+        <button class="btn btn-secondary" onclick="document.getElementById('demo-form').style.display = document.getElementById('demo-form').style.display === 'none' ? 'block' : 'none'">
+            Schedule a 15-Minute Demo
+        </button>
+        <div id="demo-form" style="display: none; margin-top: var(--spacing-lg); background: rgba(255,255,255,0.1); padding: var(--spacing-lg); border-radius: 0.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+            <form onsubmit="handleDemoBooking(event)">
+                <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                    <input type="text" placeholder="Your name" required style="background: white; border: none; color: var(--dark-text);">
+                </div>
+                <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                    <input type="email" placeholder="Your email" required style="background: white; border: none; color: var(--dark-text);">
+                </div>
+                <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                    <input type="tel" placeholder="Your phone" required style="background: white; border: none; color: var(--dark-text);">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Demo Booking</button>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- END DEMO-CTA SECTION -->
+
+<!-- ================================================
+     FOOTER
+     ================================================ -->
+<!-- START FOOTER SECTION -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>Product</h3>
+            <a href="#">ProspectID</a>
+            <a href="#">ProspectMax</a>
+            <a href="#">SEO + AI Visibility</a>
+            <a href="#">Pricing</a>
+        </div>
+        <div class="footer-column">
+            <h3>Company</h3>
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">Podcast</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-column">
+            <h3>Resources</h3>
+            <a href="#">Documentation</a>
+            <a href="#">API Reference</a>
+            <a href="#">Status</a>
+            <a href="#">Support</a>
+        </div>
+        <div class="footer-column">
+            <h3>Legal</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+            <a href="#">Compliance</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 ReadyProspect. All rights reserved.</p>
+    </div>
+</footer>
+<!-- END FOOTER SECTION -->
+
+<script>
+    // ============================================
+    // AUDIENCE DETECTION & PERSONALIZATION
+    // ============================================
+    function detectAudience() {
+        // Get referrer and UTM params
+        const referrer = document.referrer;
+        const urlParams = new URLSearchParams(window.location.search);
+        const utm_source = urlParams.get('utm_source') || '';
+        const utm_campaign = urlParams.get('utm_campaign') || '';
+
+        let audience = 'diy'; // default
+
+        // Simple detection logic
+        if (referrer.includes('g2.com') || referrer.includes('capterra')) {
+            audience = 'diy';
+        }
+        if (utm_source === 'linkedin' || referrer.includes('linkedin')) {
+            audience = 'agency';
+        }
+
+        return audience;
+    }
+
+    function personalizeHero() {
+        const audience = detectAudience();
+        const headline = document.getElementById('hero-headline');
+        const subheading = document.getElementById('hero-subheading');
+
+        if (audience === 'agency') {
+            headline.textContent = 'White-Label Lead Automation for Your Clients';
+            subheading.textContent = 'Agencies reselling ProspectID + ProspectMax report 40% higher client retention and 30% more expansion revenue.';
+        } else {
+            // Default DIY
+            headline.textContent = 'Stop Losing $50k/Month to Missed Calls';
+            subheading.textContent = 'Businesses using ProspectMax recover an average of $47,000/month in lost revenue within 90 days.';
+        }
+    }
+
+    // ============================================
+    // ROI CALCULATOR
+    // ============================================
+    function calculateROI(event) {
+        event.preventDefault();
+
+        const industry = document.getElementById('industry').value;
+        const leadsPerMonth = parseInt(document.getElementById('leads-per-month').value);
+        const closeRate = parseInt(document.getElementById('close-rate').value) / 100;
+        const dealValue = parseInt(document.getElementById('deal-value').value);
+
+        // Calculate potential revenue
+        const potentialRevenue = leadsPerMonth * closeRate * dealValue;
+
+        // Assume 30% lost to missed calls/slow response
+        const lostRevenue = potentialRevenue * 0.30;
+
+        // ProspectMax recovers ~70% of lost revenue
+        const recoveredRevenue = lostRevenue * 0.70;
+
+        // Display results
+        const result = document.getElementById('roi-result');
+        document.getElementById('roi-amount').textContent = `$${Math.round(lostRevenue).toLocaleString()}`;
+        document.getElementById('roi-recovery').textContent = `That's $${Math.round(recoveredRevenue).toLocaleString()}/month in recovered revenue.`;
+
+        result.classList.add('show');
+        result.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ============================================
+    // FAQ TOGGLE
+    // ============================================
+    function toggleFAQ(element) {
+        const item = element.parentElement;
+        item.classList.toggle('open');
+    }
+
+    // ============================================
+    // DEMO BOOKING
+    // ============================================
+    function handleDemoBooking(event) {
+        event.preventDefault();
+        alert('Thank you! We'll send you a calendar link shortly.');
+        // In production, this would submit to Salesforce/CRM
+        document.getElementById('demo-form').style.display = 'none';
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        personalizeHero();
+        
+        // Add scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(el => {
+            observer.observe(el);
+        });
+    });
+
+    // ============================================
+    // ANALYTICS (GA4 integration)
+    // ============================================
+    function trackEvent(eventName, eventData = {}) {
+        if (window.gtag) {
+            gtag('event', eventName, eventData);
+        }
+        console.log('Event tracked:', eventName, eventData);
+    }
+
+    // Track CTA clicks
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            trackEvent('cta_click', {
+                button_text: this.textContent,
+                section: this.closest('section')?.id || 'unknown'
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
